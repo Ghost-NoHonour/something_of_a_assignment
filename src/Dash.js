@@ -1,113 +1,85 @@
 import React, { useState } from "react";
-import { Container, Row, Col, Button, Nav, Card, Image } from "react-bootstrap";
-import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
-import { FaUser, FaFileAlt, FaCog } from "react-icons/fa"; // icons
+import { Container, Row, Col, Card } from "react-bootstrap";
+import Sidebar from "./SideBar";
 import Profile from "./Profile";
 import ArticlesPage from "./ArticlesPage";
-import { FaHome } from "react-icons/fa"; 
-import './Dashboard.css';
+import pp from "./components/pp.png";
+import { Routes, Route, Link } from "react-router-dom";
 
-// Sidebar Component
-const Sidebar = ({ collapsed, toggleSidebar, username, profilePic }) => (
-  <div className={`sidebar bg-light d-flex flex-column justify-content-between ${collapsed ? "collapsed" : ""}`} style={{ height: "100vh" }}>
-    
-    <div>
-      {/* Profile at top */}
-      {!collapsed && (
-        <div className="text-center p-3">
-          <Image src={profilePic} roundedCircle width={60} height={60} />
-          <h6 className="mt-2 fw-bold">{username}</h6>
-        </div>
-      )}
-      
-      <Button 
-        variant="primary" 
-        className="toggle-btn mb-3"
-        onClick={toggleSidebar}
-      >
-        {collapsed ? "→" : "←"}
-      </Button>
-      
-      <Nav className="flex-column">
-        <Nav.Link as={Link} to="/profile" className="d-flex align-items-center">
-          <FaUser className="me-2" /> {!collapsed && "Profile"}
-        </Nav.Link>
-        <Nav.Link as={Link} to="/articles" className="d-flex align-items-center">
-          <FaFileAlt className="me-2" /> {!collapsed && "My Articles"}
-        </Nav.Link>
-        <Nav.Link as={Link} to="/" className="d-flex align-items-center">
-          <FaHome className="me-2" /> {!collapsed && "Dashboard"}
-        </Nav.Link>
-      </Nav>
-    </div>
-  </div>
-);
+const Dashboard = () => {
+  const [collapsed, setCollapsed] = useState(false);
 
-// Dashboard Homepage Component
-const HomeDashboard = ({ articles }) => {
-  const recentArticles = articles.slice(0, 5);
+  const [user, setUser] = useState({
+    fullName: "Noth Ingcre Ative",
+    email: "doingsomethin11@gmail.com",
+    dateJoined: "2023-01-15",
+    profilePic: pp
+  });
 
-  return (
-    <div>
-      <h2>Author Dashboard</h2>
-      <p>Welcome to your dashboard! Here are your recent articles:</p>
+  const [articles, setArticles] = useState([
+  { id: 1, title: "Understanding React Hooks", status: "Published", lastUpdated: "2025-08-01" },
+  { id: 2, title: "A Beginner's Guide to Node.js", status: "Draft", lastUpdated: "2025-08-02" },
+  { id: 3, title: "CSS Grid vs Flexbox: Practical Examples", status: "Published", lastUpdated: "2025-08-03" },
+  { id: 4, title: "Async/Await in JavaScript Explained", status: "Draft", lastUpdated: "2025-08-04" },
+  { id: 5, title: "Introduction to TypeScript", status: "Published", lastUpdated: "2025-08-05" },
+  { id: 6, title: "Building a REST API with Express", status: "Published", lastUpdated: "2025-08-06" },
+  { id: 7, title: "Understanding Redux for State Management", status: "Draft", lastUpdated: "2025-08-07" },
+  { id: 8, title: "Responsive Web Design Best Practices", status: "Published", lastUpdated: "2025-08-08" },
+  { id: 9, title: "Getting Started with Next.js", status: "Draft", lastUpdated: "2025-08-09" },
+  { id: 10, title: "Web Accessibility Guidelines", status: "Published", lastUpdated: "2025-08-10" },
+  { id: 11, title: "Deploying React Apps to Netlify", status: "Published", lastUpdated: "2025-08-11" },
+  { id: 12, title: "Unit Testing with Jest and React Testing Library", status: "Draft", lastUpdated: "2025-08-12" },
+  { id: 13, title: "Using Context API vs Redux", status: "Published", lastUpdated: "2025-08-13" },
+  { id: 14, title: "Modern CSS Techniques: Variables and Flexbox", status: "Draft", lastUpdated: "2025-08-14" },
+  { id: 15, title: "Optimizing React Performance", status: "Published", lastUpdated: "2025-08-15" },
+  { id: 16, title: "Introduction to GraphQL with React", status: "Draft", lastUpdated: "2025-08-16" },
+  { id: 17, title: "Handling Forms in React Efficiently", status: "Published", lastUpdated: "2025-08-17" },
+  { id: 18, title: "React Router v6: Tips and Tricks", status: "Draft", lastUpdated: "2025-08-18" },
+  { id: 19, title: "Building a Blog with Gatsby", status: "Published", lastUpdated: "2025-08-19" },
+  { id: 20, title: "Authentication in React Apps", status: "Draft", lastUpdated: "2025-08-20" },
+  { id: 21, title: "Using Tailwind CSS with React", status: "Published", lastUpdated: "2025-08-21" },
+  { id: 22, title: "State Management with Recoil", status: "Draft", lastUpdated: "2025-08-22" },
+  { id: 23, title: "Building a Portfolio Website in React", status: "Published", lastUpdated: "2025-08-23" },
+  { id: 24, title: "Integrating Firebase with React", status: "Draft", lastUpdated: "2025-08-24" },
+  { id: 25, title: "Using React Query for Data Fetching", status: "Published", lastUpdated: "2025-08-25" }
+]);
+
+  // Dashboard home showing clickable articles
+  const DashboardHome = () => (
+    <Container>
+      <h2 className="mb-4">Author Dashboard</h2>
       <Row>
-        {recentArticles.map(article => (
-          <Col md={6} lg={4} key={article.id} className="mb-3">
-            <Card as={Link} to="/articles" style={{ cursor: "pointer", textDecoration: "none" }}>
+        {articles.slice(0, 5).map((article) => (
+          <Col md={4} key={article.id} className="mb-3">
+            <Card>
               <Card.Body>
-                <Card.Title>{article.title}</Card.Title>
-                <Card.Subtitle className="mb-2 text-muted">{article.status}</Card.Subtitle>
+                <Card.Title>
+                  <Link to="/articles">{article.title}</Link>
+                </Card.Title>
+                <Card.Text>Status: {article.status}</Card.Text>
               </Card.Body>
             </Card>
           </Col>
         ))}
       </Row>
-    </div>
+    </Container>
   );
-};
-
-// Main Dashboard Component
-const Dashboard = () => {
-  const [collapsed, setCollapsed] = useState(false);
-
-  // Shared articles state
-  const [articles, setArticles] = useState(
-    Array.from({ length: 50 }, (_, i) => ({
-      id: i + 1,
-      title: `Article ${i + 1}`,
-      status: i % 2 === 0 ? "Published" : "Draft",
-      lastUpdated: `2025-08-${String((i % 30) + 1).padStart(2, "0")}`
-    }))
-  );
-
-  // Example user info
-  const username = "John Doe";
-  const profilePic = "https://via.placeholder.com/60";
 
   return (
-    <Router>
-      <Container fluid>
-        <Row>
-          <Col xs={collapsed ? 1 : 2} id="sidebar-wrapper" className="p-0">
-            <Sidebar 
-              collapsed={collapsed} 
-              toggleSidebar={() => setCollapsed(!collapsed)} 
-              username={username}
-              profilePic={profilePic}
-            />
-          </Col>
-          <Col xs={collapsed ? 11 : 10} id="page-content-wrapper">
-            <Routes>
-              <Route path="/" element={<HomeDashboard articles={articles} />} />
-              <Route path="/profile" element={<Profile />} />
-              <Route path="/articles" element={<ArticlesPage articles={articles} setArticles={setArticles} />} />
-              <Route path="/settings" element={<h2>Settings Page (Coming Soon)</h2>} />
-            </Routes>
-          </Col>
-        </Row>
-      </Container>
-    </Router>
+    <Container fluid>
+      <Row>
+        <Col xs={collapsed ? 1 : 2} id="sidebar-wrapper">
+          <Sidebar collapsed={collapsed} toggleSidebar={() => setCollapsed(!collapsed)} user={user} />
+        </Col>
+        <Col xs={collapsed ? 11 : 10} id="page-content-wrapper">
+          <Routes>
+            <Route path="/" element={<DashboardHome />} />
+            <Route path="/profile" element={<Profile user={user} setUser={setUser} />} />
+            <Route path="/articles" element={<ArticlesPage articles={articles} setArticles={setArticles} />} />
+          </Routes>
+        </Col>
+      </Row>
+    </Container>
   );
 };
 
